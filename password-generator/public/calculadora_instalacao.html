@@ -9,23 +9,64 @@
 <body>
     <div class="calculator-container">
         <h1>Calculadora de Valor de Instalação</h1>
-        <form id="installation-calculator">
+        <form id="installation-calculator" onsubmit="calculaPreco(event)">
             <div class="form-group">
                 <label for="fiber-price">Valor por metro da fibra (R$):</label>
-                <input type="text" id="fiber-price" value="2.50" readonly>
+                <input type="text" id="fiber-price" readonly>
             </div>
             <div class="form-group">
                 <label for="fiber-length">Metragem gasta de fibra (m):</label>
                 <input type="number" id="fiber-length" placeholder="Insira a metragem gasta">
+                <p id="ultimo-valor"></p> <!-- Adicionado para mostrar o valor obtido -->
             </div>
             <button type="submit">Calcular</button>
         </form>
+        <p id="installation-cost"></p> <!-- Adicionado para mostrar o valor da instalação -->
     </div>
 
     <script>
-        function getUltimoValor(){
-            
+        function getUltimoValor() {
+            fetch('/calculadora_instalacao')
+                .then(response => response.text())
+                .then(value => {
+                    document.getElementById('fiber-price').value = value;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
+
+        function calculaPreco(event) {
+    event.preventDefault(); // Previne o envio do formulário e o recarregamento da página
+
+    const fiberPrice = parseFloat(document.getElementById('fiber-price').value);
+    const fiberLength = parseFloat(document.getElementById('fiber-length').value);
+
+    if (isNaN(fiberPrice) || isNaN(fiberLength)) {
+        alert('Por favor, insira valores válidos.');
+        return;
+    }
+
+    let result;
+    if (fiberLength <= 300) {
+        result = 100;
+    } else if (fiberLength >= 300 && fiberLength <= 399) {
+        result = 150;
+    } else if (fiberLength >= 400 && fiberLength <= 499) {
+        result = 200;
+    } else if (fiberLength >= 500 && fiberLength <= 550) {
+        result = 250;
+    } else {
+        result = fiberPrice * 2 * fiberLength;
+    }
+
+    document.getElementById('installation-cost').innerText = `O valor da instalação é R$ ${result.toFixed(2)}`;
+}
+
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            getUltimoValor();
+        });
     </script>
 </body>
 </html>
