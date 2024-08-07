@@ -4,6 +4,7 @@ import { exec } from 'child_process'
 import { error } from 'console'
 import { stdout } from 'process'
 import { fileURLToPath } from 'url';
+import cors from 'cors'
 const app = express();
 const port = 3000;  
 import LimpaBloqueio from './controllers/LimpaBloqueioControllers.js';
@@ -13,6 +14,7 @@ import LimpaBloqueio from './controllers/LimpaBloqueioControllers.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+app.use(cors())
 // Serve arquivos estáticos da pasta "public"
 app.use(express.static(path.join(__dirname, 'public')));
 

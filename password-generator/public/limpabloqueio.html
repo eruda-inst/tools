@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Senhas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="list-aside">
+        <h2>Lista de endereços bloqueados</h2>
+        <div class="list-container">
+            
+        </div>
+    </div>
+    <main>
+        <div class="main-container">
+            <div class="search-address">
+                <h2>Pesquisar um ip</h2>
+                <input type="text" id="ip-address-search">
+                <button>Desbloquear</button>
+            </div>
+            <div class="unblock-address">
+                <h2>Desbloquear um ip</h2>
+                <input type="text" id="ip-address-unblock">
+                <button>Desbloquear</button>
+            </div>
+        </div>
+    </main>
+    
+    
+
+    <script>
+        function listAdresses() {
+            fetch('http://localhost:3000/limpabloqueio/lista')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.status === 200) {
+                        // Acesse a lista de output
+                        const outputList = data.output;
+
+                        // Exiba a lista na página
+                        const listContainer = document.querySelector('.list-container');
+                        listContainer.innerHTML = ''; // Limpa qualquer conteúdo existente
+
+                        outputList.forEach(address => {
+                            const listItem = document.createElement('div');
+                            listItem.textContent = address;
+                            listItem.classList.add('element'); // Adiciona a classe 'element'
+                            listContainer.appendChild(listItem);
+                        });
+                    } else {
+                        console.error('Erro na resposta do servidor:', data);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        function limpabloqueio(){
+
+        }
+        document.addEventListener('DOMContentLoaded', (event) => {
+            listAdresses();
+        });
+    </script>
+</body>
+</html>
