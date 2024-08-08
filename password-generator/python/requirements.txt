@@ -1,0 +1,10 @@
+greenlet
+pandas
+psycopg2
+python-dateutil
+python-dotenv
+pytz
+six
+sqlalchemy==1.4.22
+typing_extensions
+tzdata

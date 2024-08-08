@@ -19,7 +19,7 @@ app.get('/generate-password', (req, res) => {
   const includeNumbers = req.query.numbers === 'true';
   const includeSpecial = req.query.special === 'true';
 
-  const command = `python3 generate_password.py ${length} ${includeUppercase} ${includeNumbers} ${includeSpecial}`;
+  const command = `python3 ../python/generate_password.py ${length} ${includeUppercase} ${includeNumbers} ${includeSpecial}`;
   exec(command, (error, stdout, stderr) => {
     if (error) {
       console.error(`exec error: ${error}`);
@@ -30,7 +30,7 @@ app.get('/generate-password', (req, res) => {
 });
 
 app.get('/calculadora_instalacao', (req, res) =>{
-  const command = 'python3 calculadora_instalacao.py';
+  const command = 'python3 ../python/calculadora_instalacao.py';
   exec(command, (error, stdout, stderr) => {
     if (error) {
       console.error(`exec error: ${error}`);
