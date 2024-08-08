@@ -26,7 +26,10 @@
             <div class="unblock-address">
                 <h2>Desbloquear um ip</h2>
                 <input type="text" id="ip-address-unblock">
-                <button>Desbloquear</button>
+                <div class="unblock-status">
+                    
+                </div>
+                <button onclick="limpabloqueio()">Desbloquear</button>
             </div>
         </div>
     </main>
@@ -60,7 +63,14 @@
                 .catch(error => console.error('Error:', error));
         }
         function limpabloqueio(){
-
+            const displayField = document.getElementsByClassName("unblock-status")[0]
+            const address = document.getElementById("ip-address-unblock").value
+            fetch(`http://localhost:3000/limpabloqueio/address/${address}`)
+            .then(response => response.json())
+            .then(data => {
+                displayField.innerHTML = data.message
+                listAdresses()
+            })
         }
         function listOneAddress(){
             const displayField = document.getElementsByClassName("block-status")[0]

@@ -19,7 +19,7 @@ class LimpaBloqueio {
     } catch (error) {
         res.status(500).json({
             status: 500,
-            message: `error while trying to get list: ${error}`
+            message: `Erro ao tentar obter a lista: ${error}`
         })
         console.log(`error while trying to get list: ${error}`)
     }
@@ -43,17 +43,17 @@ class LimpaBloqueio {
                 if(blocked){
                     res.status(200).json({
                         status: 200,
-                        message: "address blocked",
+                        message: "Endereço bloqueado",
                         blocked: blocked
                     })
                     console.log("address is blocked", incomingAddress)
                 }else{
-                    throw new Error('address not found in block list')
+                    throw new Error('Endereço não encontrado na lista de bloqueio')
                 }
             } catch (error) {
                 res.status(200).json({
                     status: 200,
-                    message: `error while trying to get address: ${error}. maybe the address isn't blocked`,
+                    message: `Erro ao tentar pegar o endereço: ${error}. Talvez ele não esteja bloqueado`,
                     blocked: false
                 })
                 console.log(`error while trying to get address: ${error}. maybe the address isn't blocked`)
@@ -62,7 +62,7 @@ class LimpaBloqueio {
     } catch (error) {
         res.status(500).json({
             status: 500,
-            message: `error while trying to get full list: ${error}`
+            message: `Erro ao tentar obter a lista completa: ${error}`
         })
         console.log(`error while trying to get full list: ${error}`)
     }
@@ -74,16 +74,16 @@ class LimpaBloqueio {
     try {
         exec(command, (error, stdout) => {
             if(stdout){
-                res.status(400).json({
-                    status: 400,
-                    message: `${address} already unblocked`
+                res.status(200).json({
+                    status: 200,
+                    message: `${address} já está desbloqueado`
                 }
                 )
                 console.log(`${address} already unblocked`)
             } else {
                 res.status(200).json({
                     status: 200,
-                    message: `${address} successfully unblocked`,
+                    message: `${address} desbloqueado com sucesso`,
                     consoleoutput: stdout
                 })
                 console.log(`${address} successfully unblocked`)
@@ -92,7 +92,7 @@ class LimpaBloqueio {
     } catch (error) {
         res.status(500).json({
             status: 500,
-            message: `an error ocurred while trying to unblock address, ${error}`
+            message: `um erro aconteceu ao tentar desbloquear o endereço, ${error}`
         })
         console.log(`an error ocurred while trying to unblock address, ${error}`)
         
