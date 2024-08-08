@@ -18,7 +18,10 @@
             <div class="search-address">
                 <h2>Pesquisar um ip</h2>
                 <input type="text" id="ip-address-search">
-                <button>Desbloquear</button>
+                <div class="block-status">
+                    pesquise para exibir status
+                </div>
+                <button onclick="listOneAddress()">Pesquisar</button>
             </div>
             <div class="unblock-address">
                 <h2>Desbloquear um ip</h2>
@@ -58,6 +61,22 @@
         }
         function limpabloqueio(){
 
+        }
+        function listOneAddress(){
+            const displayField = document.getElementsByClassName("block-status")[0]
+            const address = document.getElementById("ip-address-search").value
+            fetch(`http://localhost:3000/limpabloqueio/status/${address}`)
+            .then(response => response.json())
+            .then(data => {
+                const blockedStatus = data.blocked
+                if(blockedStatus){
+                    displayField.innerHTML = `${address} é um endereço bloqueado`
+                    displayField.innerHTML += `<br> resposta do servidor: <br><span style = "color: red;">${data.message}</span>`
+                } else {
+                    displayField.innerHTML = `${address} não está bloqueado`
+                    displayField.innerHTML += `<br> resposta do servidor: <br><span style = "color: green;">${data.message}</span>`
+                }
+            })
         }
         document.addEventListener('DOMContentLoaded', (event) => {
             listAdresses();

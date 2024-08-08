@@ -51,8 +51,8 @@ class LimpaBloqueio {
                     throw new Error('address not found in block list')
                 }
             } catch (error) {
-                res.status(500).json({
-                    status: 500,
+                res.status(200).json({
+                    status: 200,
                     message: `error while trying to get address: ${error}. maybe the address isn't blocked`,
                     blocked: false
                 })
