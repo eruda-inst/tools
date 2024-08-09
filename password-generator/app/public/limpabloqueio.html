@@ -79,6 +79,8 @@
             .then(response => response.json())
             .then(data => {
                 const blockedStatus = data.blocked
+                console.log(blockedStatus)
+                console.log(data)
                 if(blockedStatus){
                     displayField.innerHTML = `${address} é um endereço bloqueado`
                     displayField.innerHTML += `<br> resposta do servidor: <br><span style = "color: red;">${data.message}</span>`
