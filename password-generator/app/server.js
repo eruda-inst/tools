@@ -1,11 +1,20 @@
-const express = require('express');
-const path = require('path');
-const { exec } = require('child_process');
-const { error } = require('console');
-const { stdout } = require('process');
+import express from 'express'
+import path from 'path'
+import { exec } from 'child_process'
+import { error } from 'console'
+import { stdout } from 'process'
+import { fileURLToPath } from 'url';
+import cors from 'cors'
 const app = express();
-const port = 3000;
+const port = 3000;  
+import LimpaBloqueio from './controllers/LimpaBloqueioControllers.js';
 
+
+// Obtenha o nome do arquivo atual e seu diretório
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use(cors())
 // Serve arquivos estáticos da pasta "public"
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -39,6 +48,10 @@ app.get('/calculadora_instalacao', (req, res) =>{
     res.send(stdout.trim())
   })
 })
+
+app.get('/limpabloqueio/address/:address', LimpaBloqueio.unblockAddress)
+app.get('/limpabloqueio/lista', LimpaBloqueio.getBlockedList)
+app.get('/limpabloqueio/status/:address', LimpaBloqueio.getBlockedByAddress)
 
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
