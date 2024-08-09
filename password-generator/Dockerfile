@@ -1,8 +1,8 @@
-# Usar uma imagem base com Node.js e Python
-FROM node:14 AS base
+# Usar uma imagem Alpine
+FROM python:3.10-alpine
 
 # Instalar Python e pip
-RUN apt-get update && apt-get install -y python3 python3-pip
+RUN apk add --no-cache nodejs npm
 
 # Configurar o diretório de trabalho para Node.js
 WORKDIR /app
@@ -23,7 +23,7 @@ WORKDIR /python
 COPY python/ .
 
 # Instalar dependências do Python
-RUN pip3 install -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Voltar para o diretório de trabalho do Node.js
 WORKDIR /app
