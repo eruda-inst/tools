@@ -3,7 +3,7 @@ import { stdout } from 'process'
 
 class LimpaBloqueio {
    static async getBlockedList(req, res, next){
-    const command = 'python3 limpabloqueio.py'
+    const command = 'python3 ../python/limpabloqueio.py'
     try {      
         exec(command, (error, stdout, stderr) => {
             const output = stdout.split("\n").slice(2,-2)
@@ -25,7 +25,7 @@ class LimpaBloqueio {
     }
    }
    static async getBlockedByAddress(req, res, next){
-    const command = 'python3 limpabloqueio.py'
+    const command = 'python3 ../python/limpabloqueio.py'
     const incomingAddress = req.params.address
     let blocked = false
     try {      
@@ -70,7 +70,7 @@ class LimpaBloqueio {
    }
    static async unblockAddress(req, res, next){
     const { address } = req.params
-    const command = `python3 limpabloqueio_unblock.py ${address}`
+    const command = `python3 ../python/limpabloqueio_unblock.py ${address}`
     try {
         exec(command, (error, stdout) => {
             if(stdout){
