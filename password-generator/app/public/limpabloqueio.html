@@ -38,7 +38,7 @@
 
     <script>
         function listAdresses() {
-            fetch('http://localhost:3000/limpabloqueio/lista')
+            fetch('http://10.0.2.9:3000/limpabloqueio/lista')
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
@@ -65,7 +65,7 @@
         function limpabloqueio(){
             const displayField = document.getElementsByClassName("unblock-status")[0]
             const address = document.getElementById("ip-address-unblock").value
-            fetch(`http://localhost:3000/limpabloqueio/address/${address}`)
+            fetch(`http://10.0.2.9:3000/limpabloqueio/address/${address}`)
             .then(response => response.json())
             .then(data => {
                 displayField.innerHTML = data.message
@@ -75,7 +75,7 @@
         function listOneAddress(){
             const displayField = document.getElementsByClassName("block-status")[0]
             const address = document.getElementById("ip-address-search").value
-            fetch(`http://localhost:3000/limpabloqueio/address/${address}`)
+            fetch(`http://10.0.2.9:3000/limpabloqueio/address/${address}`)
             .then(response => response.json())
             .then(data => {
                 const blockedStatus = data.blocked
