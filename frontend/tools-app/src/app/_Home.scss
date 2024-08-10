@@ -1,0 +1,11 @@
+@import "./globals.css";
+
+.right-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+    & > * {
+        margin-left: 1em;
+    }
+}
