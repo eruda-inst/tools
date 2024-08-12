@@ -17,8 +17,8 @@
   font-size: normal;
 }
 @font-face {
-  font-family: 'Trap-Regular';
-  src: url('../../fonts/trap/Trap-Regular.otf') format('opentype');
+  font-family: 'Avant-Garde-Bold';
+  src: url('../../fonts/avant_garde/ITCAvantGardeStd-Bold.ttf') format('opentype');
   font-weight: normal;
   font-size: normal;
 }
@@ -37,6 +37,36 @@
 @font-face {
   font-family: 'Beastly-24';
   src: url('../../fonts/beastly/fonnts.com-BeastlyDemo-24Point.otf') format('opentype');
+  font-weight: normal;
+  font-size: normal;
+}
+@font-face {
+  font-family: 'Africa-Cliff';
+  src: url('../../fonts/africa/AfricaTrial-Cliff-uploaded-63b6488cc650b.otf') format('opentype');
+  font-weight: normal;
+  font-size: normal;
+}
+@font-face {
+  font-family: 'Africa-Drylands';
+  src: url('../../fonts/africa/AfricaTrial-Drylands-uploaded-63b6488c57f69.otf') format('opentype');
+  font-weight: normal;
+  font-size: normal;
+}
+@font-face {
+  font-family: 'Africa-Rainfall';
+  src: url('../../fonts/africa/AfricaTrial-Rainfall-uploaded-63b6488ccf4ad.otf') format('opentype');
+  font-weight: normal;
+  font-size: normal;
+}
+@font-face {
+  font-family: 'Al-Ragas';
+  src: url('../../fonts/al_ragas/Al_Ragas.otf') format('opentype');
+  font-weight: normal;
+  font-size: normal;
+}
+@font-face {
+  font-family: 'TostadaFF';
+  src: url('../../fonts/tostadaff/TOSTADA.ttf') format('truetype');
   font-weight: normal;
   font-size: normal;
 }
@@ -118,11 +148,11 @@
     @apply border-border;
   }
   body {
+    height: 95svh;
     font-family: 'Kollektif', 'Inter', sans-serif;
     @apply bg-background text-foreground;
   }
 }
-
-.beastly{
-  font-family: 'Beastly-24', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+.accent-text{
+  font-family: 'Avant-Garde-Bold', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
