@@ -16,7 +16,7 @@ export default function Home() {
       <main className="flex h-full flex-col items-center justify-center p-24">
         <div className="main-menu w-4/6 h-3/6 grid grid-cols-1 gap-4 md:grid-cols-3">
           <MenuCard 
-          link="/"
+          link="/password-generator"
           className="w-full transition-all  dark:hover:bg-zinc-50/5 backdrop-blur-md"
           title="Gerador de senhas" 
           description="Gerador de senhas simples"

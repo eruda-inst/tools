@@ -1,13 +1,27 @@
-import { Container } from "postcss"
-import "./_Logo.scss"
+"use client"
+import { CheckedState } from "@radix-ui/react-checkbox";
+import "./_Checkbox.scss"
+import { Checkbox } from "@/components/ui/checkbox"
 
-export default function Logo() {
-    return(
-        <div className="logo-container">
-            <a href="/">
-            <h1 className="accent-text header-logo text-4xl" style={{ color: 'hsl(var(--accent))'}}>tools</h1>
-            <h1 className="accent-text header-logo text-4xl overlay" style={{ color: 'hsl(var(--foreground))'}}>tools</h1>
-            </a>
-        </div>
-    )
+type CheckboxTypes= {
+    label: string;
+    checked: boolean;
+    onChange: (checked: boolean) => void ;
+}
+
+export function CheckboxnLabel({label, checked, onChange, ...props}:CheckboxTypes) {
+    const handleChange = (checked: CheckedState) => {
+        onChange(checked === true);
+    }
+  return (
+    <div className="flex items-center space-x-2">
+      <Checkbox checked={checked} onCheckedChange={handleChange} id="terms" {...props}/>
+      <label
+        htmlFor="terms"
+        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      >
+        {label}
+      </label>
+    </div>
+  )
 }
