@@ -26,7 +26,7 @@ export default function Home() {
             <KeyRound />
           </MenuCard>
           <MenuCard 
-          link="/"
+          link="/instal-calc"
           className="w-full transition-all  dark:hover:bg-zinc-50/5 backdrop-blur-md"
           title="Calculadora de Instalação" 
           description="Calculo de valor"

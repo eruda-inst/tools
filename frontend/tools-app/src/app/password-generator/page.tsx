@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function Home() {
+export default function PasswordGenerator() {
   const [inputNumberValue, setInputNumberValue] = useState(8);
   const [includeUpperCases, setIncludeUpperCases] = useState(false);
   const [includeNumbers, setIncludeNumbers] = useState(false);
