@@ -22,6 +22,7 @@ export default function PasswordGenerator() {
   const [inputNumberValue, setInputNumberValue] = useState(8);
   const [includeUpperCases, setIncludeUpperCases] = useState(false);
   const [includeNumbers, setIncludeNumbers] = useState(false);
+  const [password, setPassword] = useState("A senha aparece aqui");
   const [includeSpecialCharacters, setIncludeSpecialCharacters] =
     useState(false);
   const [passwordButton, setPasswordButton] = useState({
@@ -63,8 +64,8 @@ export default function PasswordGenerator() {
           <ModeToggle />
         </div>
       </div>
-      <main className="flex h-full flex-col items-center justify-center p-24">
-        <Card className="mx-auto max-w-sm">
+      <main className="flex h-full flex-col gap-3 items-center justify-center p-24">
+        <Card className="mx-auto w-2/6">
           <CardHeader>
             <CardTitle className="text-2xl">Gerador de senhas</CardTitle>
             <CardDescription>
@@ -109,7 +110,7 @@ export default function PasswordGenerator() {
                   onChange={setIncludeSpecialCharacters}
                 />
               </div>
-              <Button
+              {/* <Button
                 type="submit"
                 className="w-full transition-all"
                 onClick={async (e) => {
@@ -120,6 +121,8 @@ export default function PasswordGenerator() {
                   } else {
                     const response = await handleSubmit()
                     setPasswordButton({ text: response, copyMode: true });
+
+                    setPassword(response)
                   }
                 }}
               >
@@ -131,9 +134,24 @@ export default function PasswordGenerator() {
                     opacity={passwordButton.copyMode ? 1 : 0}
                   />
                 </div>
+              </Button> */}
+              <Button
+                type="submit"
+                className="w-full transition-all"
+                onClick={async (e) => {
+                    const response = await handleSubmit()
+                    setPasswordButton({ text: response, copyMode: true });
+                    setPassword(response)
+                }}
+              >
+                Gerar Senha
               </Button>
             </div>
           </CardContent>
+        </Card>
+        <Card className="bg-primary-foreground mx-auto flex flex-col justify-center w-2/6">
+        <CardHeader className="flex flex-col justify-center items-center">{password}</CardHeader>
+          
         </Card>
         <PageBackground text="Password" />
       </main>
