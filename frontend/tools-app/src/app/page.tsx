@@ -38,7 +38,7 @@ export default function Home() {
             title="Calculadora de Instalação"
             description="Calculo de valor"
             content="Calcule o valor de instalação específica para a situação com base no ultimo custo da fibra"
-            footer="v1.0"
+            footer="v1.0.1"
           >
             <Calculator />
           </MenuCard>
@@ -53,7 +53,7 @@ export default function Home() {
             <div className="flex flex-row justify-between">
               <PhoneMissed />
               <HoverCard>
-                <HoverCardTrigger><Badge variant={"destructive"}>Beta</Badge></HoverCardTrigger>
+               <Badge variant={"default"}>Beta</Badge>
                 <HoverCardContent className="dark:bg-zinc-900/60 bg-zinc-50/50 backdrop-blur-md">
                   O sistema já roda em um outro servidor mas ainda não teve updates de frontend para se encaixar com o padrão atual
                 </HoverCardContent>

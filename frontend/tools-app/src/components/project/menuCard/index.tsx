@@ -19,7 +19,7 @@ import {
   
   export default function MenuCard({ title, description, content, footer, children, className, link }: CardProps) {
     return (
-    <a href={link}>
+    <a href={link} className="min-w-48">
       <Card className={className}>
         <CardHeader>
           {children}

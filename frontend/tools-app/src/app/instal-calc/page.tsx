@@ -52,7 +52,7 @@ export default function InstalCalc() {
     } else if (fiberLength >= 500 && fiberLength <= 550) {
         setInstallValue(250);
     } else {
-        setInstallValue(parseInt((fiberPrice * 2 * fiberLength).toFixed(2)));
+        setInstallValue(parseFloat((fiberPrice * 2 * fiberLength).toFixed(2)));
     } 
   }
 
@@ -97,7 +97,7 @@ export default function InstalCalc() {
             </CardHeader>
             <CardContent>
               Valor da instalação
-              <div className="accent-text main-value text-4xl w-full h-min flex flex-row justify-start items-center">
+              <div className="main-value text-4xl w-full h-min flex flex-row justify-start items-center">
                 R$ {installValue}
               </div>
             </CardContent>
