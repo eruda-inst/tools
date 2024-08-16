@@ -1,5 +1,5 @@
 "use client";
-
+import "./_Password.scss"
 import Logo from "@/components/project/logo";
 import axios from "axios"
 import { ModeToggle } from "@/components/ui/theme-toggle";
@@ -57,15 +57,15 @@ export default function PasswordGenerator() {
   };
 
   return (
-    <div className="page-body h-full w-screen p-5">
-      <div className="nav-bar flex flex-row items-center justify-between w-100 ">
+    <div className="page-body overflow-clip h-full w-screen">
+      <div className="nav-bar flex flex-row items-center justify-between w-full fixed p-5">
         <Logo></Logo>
         <div className="right-container">
           <ModeToggle />
         </div>
       </div>
-      <main className="flex h-full flex-col gap-3 items-center justify-center p-24">
-        <Card className="mx-auto w-2/6">
+      <main className="flex overflow-clip h-screen flex-col gap-3 items-center justify-center p-10 sm:p-24">
+        <Card className="w-full m-0 sm:mx-auto sm:w-2/6">
           <CardHeader>
             <CardTitle className="text-2xl">Gerador de senhas</CardTitle>
             <CardDescription>
@@ -93,7 +93,7 @@ export default function PasswordGenerator() {
                   required
                 />
               </div>
-              <div className="grid gap-2">
+              <div className="grid gap-2 checkbox-group">
                 <CheckboxnLabel
                   label="Incluir Letras Maiúsculas"
                   checked={includeUpperCases}
@@ -149,7 +149,7 @@ export default function PasswordGenerator() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-primary-foreground mx-auto flex flex-col justify-center w-2/6">
+        <Card className="bg-primary-foreground mx-auto flex flex-col justify-center w-full sm:w-2/6">
         <CardHeader className="flex flex-col justify-center items-center">{password}</CardHeader>
           
         </Card>

@@ -67,16 +67,16 @@ export default function InstalCalc() {
   }, [refreshFiber]);
 
   return (
-    <div className="page-body h-full w-screen p-5">
-      <div className="nav-bar flex flex-row items-center justify-between w-100 ">
+    <div className="page-body h-full overflow-clip w-screen">
+      <div className="nav-bar flex flex-row items-center justify-between w-full fixed p-5">
         <Logo></Logo>
         <div className="right-container">
           <ModeToggle />
         </div>
       </div>
-      <main className="page-body h-full flex flex-row items-center justify-center  w-full p-5">
-        <div className="container flex flex-row w-full justify-center h-min">
-          <Card className="h-min dark:bg-primary-foreground bg-primary-foreground/50 w-3/12 min-w-48">
+      <main className="page-body h-screen flex flex-row gap-3 items-center justify-center  w-full p-5">
+        <div className="p-0 container flex flex-col gap-4 items-center sm:flex-row w-full justify-center h-full">
+          <Card className="h-min dark:bg-primary-foreground bg-primary-foreground/50 w-full sm:w-3/12 min-w-48">
             <CardHeader>
               <CardTitle>Preço atual do metro da fibra</CardTitle>
               <CardDescription className="text-zinc-700 dark:text-zinc-300">
@@ -91,7 +91,7 @@ export default function InstalCalc() {
               )}
             </CardContent>
           </Card>
-          <Card className="ml-4 h-min w-2/6 min-w-48">
+          <Card className="sm:ml-4 h-min w-full sm:w-2/6 min-w-48">
             <CardHeader>
               <CardTitle>Calculadora de Valor de Instalação</CardTitle>
             </CardHeader>

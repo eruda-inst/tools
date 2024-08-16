@@ -13,15 +13,15 @@ import {
 
 export default function Home() {
   return (
-    <div className="page-body h-full w-screen p-5">
-      <div className="nav-bar flex flex-row items-center justify-between w-100 ">
+    <div className="page-body h-full w-screen">
+      <div className="nav-bar flex flex-row items-center justify-between w-full fixed  p-5">
         <Logo></Logo>
         <div className="right-container">
           <ModeToggle />
         </div>
       </div>
-      <main className="flex h-full flex-col items-center justify-center p-24">
-        <div className="main-menu w-4/6 h-3/6 grid grid-cols-1 gap-4 md:grid-cols-3">
+      <main className="flex h-full w-fill flex-col items-center justify-center p-10 sm:p-24">
+        <div className="main-menu w-fill h-3/6 grid grid-cols-1 gap-4 md:grid-cols-3">
           <MenuCard
             link="/password-generator"
             className="w-full transition-all  dark:hover:bg-zinc-50/5 backdrop-blur-md"
@@ -44,10 +44,10 @@ export default function Home() {
           </MenuCard>
           <MenuCard
             link="http://10.0.2.9:3000/limpabloqueio.html"
-            className="w-full transition-all  dark:hover:bg-zinc-50/5 backdrop-blur-md"
+            className="w-full transition-all sm:m-0 mb-10 dark:hover:bg-zinc-50/5 backdrop-blur-md"
             title="Limpa bloqueio Simples IP"
             description="Liberação de acesso"
-            content="Veja lista de endereços bloqueados, pesquise presença dentro da lista de bloqueio e desbloqueie "
+            content="Veja lista de endereços bloqueados, pesquise presença dentro da lista e desbloqueie"
             footer="v0.1"
           >
             <div className="flex flex-row justify-between">
