@@ -1,6 +1,7 @@
 "use client";
 import "./_InstalCalc.scss"
 import { Input } from "@/components/ui/input";
+import { API } from "@/config/env"
 import {
   Card,
   CardContent,
@@ -9,9 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import DynamicInput from "@/components/project/dynamicStateInput";
-import Logo from "@/components/project/logo";
-import { ModeToggle } from "@/components/ui/theme-toggle";
+import Header from "@/components/project/header";
 import FiberValue from "@/components/project/fiberValueAPI";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -21,7 +20,7 @@ export default function InstalCalc() {
   const [refreshFiber, setRefreshFiber] = useState(false)
   const [installValue, setInstallValue] = useState(0);
   const handleSubmit = async () => {
-    const baseUrl = "http://10.0.2.9:3000/calculadora_instalacao";
+    const baseUrl = API.TOOLS + "/calculadora_instalacao";
 
     try {
       const response = await axios.get(baseUrl);
@@ -68,12 +67,7 @@ export default function InstalCalc() {
 
   return (
     <div className="page-body h-full overflow-clip w-screen">
-      <div className="nav-bar flex flex-row items-center justify-between w-full fixed p-5">
-        <Logo></Logo>
-        <div className="right-container">
-          <ModeToggle />
-        </div>
-      </div>
+      <Header/>
       <main className="page-body h-screen flex flex-row gap-3 items-center justify-center  w-full p-5">
         <div className="p-0 container flex flex-col gap-4 items-center sm:flex-row w-full justify-center h-full">
           <Card className="h-min dark:bg-primary-foreground bg-primary-foreground/50 w-full sm:w-3/12 min-w-48">

@@ -1,13 +1,11 @@
 "use client";
 import "./_Password.scss"
-import Logo from "@/components/project/logo";
 import axios from "axios"
-import { ModeToggle } from "@/components/ui/theme-toggle";
 import PageBackground from "@/components/project/pageBackgorund";
 import { CheckboxnLabel } from "@/components/project/checkbox";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Copy } from "lucide-react";
+import Header from "@/components/project/header";
 import {
   Card,
   CardContent,
@@ -17,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { API } from "@/config/env";
 
 export default function PasswordGenerator() {
   const [inputNumberValue, setInputNumberValue] = useState(8);
@@ -31,7 +30,7 @@ export default function PasswordGenerator() {
   });
 
   const handleSubmit = async () => {
-    const baseUrl = 'http://10.0.2.9:3000/generate-password';
+    const baseUrl = API.TOOLS + '/generate-password';
     const params = {
       length: inputNumberValue, 
       uppercase: includeUpperCases, 
@@ -58,12 +57,7 @@ export default function PasswordGenerator() {
 
   return (
     <div className="page-body overflow-clip h-full w-screen">
-      <div className="nav-bar flex flex-row items-center justify-between w-full fixed p-5">
-        <Logo></Logo>
-        <div className="right-container">
-          <ModeToggle />
-        </div>
-      </div>
+      <Header/>
       <main className="flex overflow-clip h-screen flex-col gap-3 items-center justify-center p-10 sm:p-24">
         <Card className="w-full m-0 sm:mx-auto sm:w-2/6">
           <CardHeader>

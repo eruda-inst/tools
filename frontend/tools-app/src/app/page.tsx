@@ -1,33 +1,63 @@
-import Logo from "@/components/project/logo";
-import { ModeToggle } from "@/components/ui/theme-toggle";
 import PageBackground from "@/components/project/pageBackgorund";
 import MenuCard from "@/components/project/menuCard";
-import { KeyRound, Calculator, PhoneMissed } from "lucide-react";
+import { KeyRound, Calculator, PhoneMissed, Car, ListChecks, FileChartColumn } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
+import Header from "@/components/project/header";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-
+import { 
+  Card, 
+  CardDescription, 
+  CardContent, 
+  CardFooter,
+  CardHeader,
+  CardTitle 
+} from "@/components/ui/card";
 export default function Home() {
   return (
     <div className="page-body h-full w-screen">
-      <div className="nav-bar flex flex-row items-center justify-between w-full fixed  p-5">
-        <Logo></Logo>
-        <div className="right-container">
-          <ModeToggle />
-        </div>
-      </div>
+      <Header/>
       <main className="flex h-full w-fill flex-col items-center justify-center p-10 sm:p-24">
-        <div className="main-menu w-fill h-3/6 grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="main-menu w-fill h-3/6 grid grid-cols-1 gap-4 md:grid-cols-4">
+        <Card>
+        <CardHeader>
+          <Car/>
+          <CardTitle>Checklist de carro</CardTitle>
+          <CardDescription>Controle de integridade veicular</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex gap-4 flex-col h-full w-full ">
+            <Link href={"/"} className="w-full">
+            <Button className="flex w-full justify-between">
+            <ListChecks className="mr-2 h-4 w-4"/>
+               Responder Formulário
+            <ListChecks className="opacity-0 mr-2 h-4 w-4"/>
+               </Button>
+            </Link>
+            <Link href={"/reports"} className="w-full">
+            <Button className="flex justify-between w-full" variant={"secondary"} >
+            <FileChartColumn className="mr-2 h-4 w-4"/>
+              Ver Respostas
+            <FileChartColumn className="opacity-0 mr-2 h-4 w-4"/>
+              </Button>
+            </Link>
+          </div>
+        </CardContent>
+        <CardFooter>
+          <p>v1.0</p>
+        </CardFooter>
+      </Card>
           <MenuCard
             link="/password-generator"
             className="w-full transition-all  dark:hover:bg-zinc-50/5 backdrop-blur-md"
             title="Gerador de senhas"
             description="Gerador de senhas simples"
-            content="Gere senhas com a complexidade ideal para a maioria dos sites e plataformas"
+            content="Gere senhas com a complexidade ideal para a maioria dos sites e plataformas de maneira aleatória"
             footer="v1.0"
           >
             <KeyRound />
