@@ -32,7 +32,7 @@ export default function Home() {
         </CardHeader>
         <CardContent>
           <div className="flex gap-4 flex-col h-full w-full ">
-            <Link href={"/"} className="w-full">
+            <Link href={"/checklist-form"} className="w-full">
             <Button className="flex w-full justify-between">
             <ListChecks className="mr-2 h-4 w-4"/>
                Responder Formulário
