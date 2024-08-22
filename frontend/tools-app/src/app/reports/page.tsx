@@ -4,16 +4,60 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import PageBackground from "@/components/project/pageBackgorund";
 import { API } from "@/config/env";
+import { isSameDay, add } from 'date-fns';
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import "./_Reports.scss";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+ 
+import * as React from "react"
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { ListChecks } from "lucide-react"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { link } from "fs";
 
 export default function Reports() {
-  const [cars, setCars] = useState<{ id: number, modelo: string }[]>([]);
+  const [cars, setCars] = useState<{ id: number; modelo: string }[]>([]);
   const [dates, setDates] = useState<string[]>([]);
-  const [plates, setPlates] = useState<string[]>([]);  // Estado para armazenar as placas
+  const [plates, setPlates] = useState<string[]>([]); // Estado para armazenar as placas
   const [selectedCar, setSelectedCar] = useState<string>("");
-  const [selectedDate, setSelectedDate] = useState<string>("");
-  const [selectedPlate, setSelectedPlate] = useState<string>("");  // Estado para a placa selecionada
+  const [selectedDate, setSelectedDate] = useState<Date | string | undefined>("");
+  const [selectedPlate, setSelectedPlate] = useState<string>(""); // Estado para a placa selecionada
   const [reports, setReports] = useState<any[]>([]);
-  const [techs, setTechs] = useState<{ id: number, nome: string }[]>([]);
+  const [techs, setTechs] = useState<{ id: number; nome: string }[]>([]);
   const [expandedReportId, setExpandedReportId] = useState<number | null>(null);
 
   useEffect(() => {
@@ -30,13 +74,20 @@ export default function Reports() {
   const handleCarSelection = async (carId: string) => {
     setSelectedCar(carId);
     setSelectedPlate(""); // Limpar a placa selecionada ao mudar o carro
-    setSelectedDate("");  // Limpar a data selecionada ao mudar o carro
+    setSelectedDate(""); // Limpar a data selecionada ao mudar o carro
 
     if (carId) {
       // Fazer requisições para obter as placas e datas relacionadas ao carro selecionado
-      const platesResponse = await axios.get(API.CHECKLIST + `/api/plates_by_car`, { params: { veiculo_id: carId } });
-      const datesResponse = await axios.get(API.CHECKLIST + `/api/dates_by_car`, { params: { veiculo_id: carId } });
-      
+      const platesResponse = await axios.get(
+        API.CHECKLIST + `/api/plates_by_car`,
+        { params: { veiculo_id: carId } }
+      );
+      const datesResponse = await axios.get(
+        API.CHECKLIST + `/api/dates_by_car`,
+        { params: { veiculo_id: carId } }
+      );
+      console.log(datesResponse)
+
       setPlates(platesResponse.data);
       setDates(datesResponse.data);
     } else {
@@ -44,21 +95,25 @@ export default function Reports() {
       setPlates([]);
       setDates([]);
     }
+    
   };
+  const [date, setDate] = useState<Date>()
 
   const fetchReports = async () => {
+    const formatedDate = date ? format(date, "MM-dd-yyyy") : ""
     try {
       const params: any = {};
       if (selectedCar) {
         params.veiculo_id = selectedCar;
       }
-      if (selectedDate) {
-        params.data_inspecao = selectedDate;
+      if (formatedDate) {
+        params.data_inspecao = formatedDate;
       }
       if (selectedPlate) {
         params.placa = selectedPlate;
       }
-
+      console.log(params)
+      console.log(date)
       const response = await axios.get(API.CHECKLIST + "/api/reports", {
         params,
       });
@@ -72,152 +127,463 @@ export default function Reports() {
     setExpandedReportId((prevId) => (prevId === reportId ? null : reportId));
   };
 
+  const isDateAllowed = (date: Date) => {
+    
+    return dates.some((allowedDate) => isSameDay(add(date, { days: -1 }), allowedDate) );
+  };
+
   const getTechName = (tecnico_id: number) => {
     const tech = techs.find((t) => t.id === tecnico_id);
     return tech ? tech.nome : "Desconhecido";
   };
 
+
   return (
+    <div className="page-body h-full  w-screen">
+      <Header />
+      <main className="page-body h-screen flex flex-col gap-3 items-center justify-start  w-full pt-28 p-5 ">
+        <Card className="sm:w-2/6 sm:border-2 sm:border-zinc-300 w-full border-none ">
+          <CardHeader className="">
+            <CardTitle className="">Relatórios de Inspeção</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {/* Filtro de Carro */}
 
-    <div className="page-body h-full overflow-clip w-screen">
-    <Header/>
-    <main className="page-body h-screen flex flex-row gap-3 items-center justify-center  w-full p-5">
-      <div className="p-0 container flex flex-col gap-4 items-center sm:flex-row w-full justify-center h-full">
-      
-      <div className="p-6 max-w-4xl mx-auto bg-white rounded-xl shadow-md space-y-4 text-black">
-      <h1 className="text-2xl font-bold text-gray-800 text-center">Relatórios de Inspeção</h1>
+            <Label htmlFor="select-car-input">Selecionar carro</Label>
 
-      {/* Filtro de Carro */}
-      <div className="space-y-2">
-        <label className="block text-gray-700">Selecionar Carro</label>
-        <select
-          className="w-full p-2 border border-gray-300 rounded-lg text-black"
-          value={selectedCar}
-          onChange={(e) => handleCarSelection(e.target.value)}  // Chama a função para buscar placas e datas
-        >
-          <option value="">Todos os carros</option>
-          {cars.map((car) => (
-            <option key={car.id} value={car.id}>
-              {car.modelo}
-            </option>
-          ))}
-        </select>
-      </div>
+            <Select onValueChange={(value) => handleCarSelection(value)}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Selecione um carro" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Carros</SelectLabel>
+                  <SelectItem value=" ">Todos os carros</SelectItem>
 
-      {/* Filtro de Placa - Aparece apenas se houver placas disponíveis */}
-      {plates.length > 0 && (
-        <div className="space-y-2">
-          <label className="block text-gray-700">Selecionar Placa</label>
-          <select
-            className="w-full p-2 border border-gray-300 rounded-lg text-black"
-            value={selectedPlate}
-            onChange={(e) => setSelectedPlate(e.target.value)}
-          >
-            <option value="">Todas as placas</option>
-            {plates.map((plate) => (
-              <option key={plate} value={plate}>
-                {plate}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+                  {cars.map((car) => (
+                    <SelectItem key={car.id} value={`${car.id}`}>
+                      {car.modelo}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
 
-      {/* Filtro de Data - Aparece apenas se houver datas disponíveis */}
-      {dates.length > 0 && (
-        <div className="space-y-2">
-          <label className="block text-gray-700">Selecionar Data</label>
-          <select
-            className="w-full p-2 border border-gray-300 rounded-lg text-black"
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-          >
-            <option value="">Todas as datas</option>
-            {dates.map((date) => (
-              <option key={date} value={date}>
-                {new Date(date).toLocaleDateString()}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+            {/* Filtro de Placa - Aparece apenas se houver placas disponíveis */}
+            {plates.length > 0 && (
+              <div>
+                <Label className="">Selecionar Placa</Label>
+                <Select onValueChange={(value) => setSelectedPlate(value)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Selecionar uma placa" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value=" ">Todas as placas</SelectItem>
+                    {plates.map((plate) => (
+                      <SelectItem key={plate} value={plate}>
+                        {plate}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
 
-      {/* Botão para buscar relatórios */}
-      <div>
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={fetchReports}
-        >
-          Buscar Relatórios
-        </button>
-      </div>
+            {/* Filtro de Data - Aparece apenas se houver datas disponíveis */}
+            {dates.length > 0 && (
+              <div className="">
+                <Label>Selecionar Data</Label>
+                <Popover >
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !date && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {date ? format(date, "PPP") : <span>Escolha uma data</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={setDate}
+                      initialFocus
+                      disabled={(date) =>{
+                        return !isDateAllowed(date)
+                      } 
+                    }
+                    />
+                  </PopoverContent>
+                </Popover>
+                
+              </div>
+            )}
+           
 
-      {/* Listagem dos relatórios */}
-      <div className="mt-6">
-        {reports.length > 0 ? (
-          reports.map((report) => (
-        <div key={report.id} className="border p-4 mb-4 rounded-lg">
-          <div
-            className="cursor-pointer text-xl font-bold text-gray-700"
-            onClick={() => toggleExpand(report.id)}
-          >
-            {`Relatório ID: ${report.id} - Data: ${new Date(report.data_inspecao).toLocaleDateString()}`}
-          </div>
+            {/* Listagem dos relatórios */}
+            <div className="mt-6">
+              {reports.length > 0 ? (
+                reports.map((report) => (
+                  <div key={report.id} className="mb-4 rounded-lg">
+                    <Button
+                    variant={"secondary"}
+                      className="w-full flex flex-row justify-between"
+                      onClick={() => toggleExpand(report.id)}
+                    >
+                      <ListChecks></ListChecks>
+                      {`Relatório ${report.id} de ${report.placa}  em ${new Date(
+                        add(report.data_inspecao, {days: 1})
+                      ).toLocaleDateString()}`}
+                      <ListChecks className="text-transparent"></ListChecks>
+                    </Button>
 
-          {expandedReportId === report.id && (
-            <ul className="mt-2 space-y-2">
-              <li>Técnico: {getTechName(report.tecnico_id)}</li> {/* Exibir o nome do técnico e a placa */}
-              <li>Placa: {report.placa}</li>
-              <li>Quilometragem: {report.quilometragem}</li>
-              <li>Freio de Pé: {report.freio_pe}</li>
-              <li>Freio de Estacionamento: {report.freio_estacionamento}</li>
-              <li>Motor de Partida: {report.motor_partida}</li>
-              <li>Limpador de Parabrisa: {report.limpador_parabrisa}</li>
-              <li>Lavador de Parabrisa: {report.lavador_parabrisa}</li>
-              <li>Buzina: {report.buzina}</li>
-              <li>Faróis: {report.farois}</li>
-              <li>Lanternas Dianteiras: {report.lanternas_dianteiras}</li>
-              <li>Lanternas Traseiras: {report.lanternas_traseiras}</li>
-              <li>Luz de Freio: {report.luz_freio}</li>
-              <li>Luz Traseira: {report.luz_re}</li>
-              <li>Triângulo de Advertência: {report.triangulo_advertencia}</li>
-              <li>Extintor de Segurança: {report.extintor_seguranca}</li>
-              <li>Espelhos Retrovisores: {report.espelhos_retrovisores}</li>
-              <li>Indicadores de Painel: {report.indicadores_painel}</li>
-              <li>Condição dos Pneus: {report.condicao_pneus}</li>
-              <li>Pneu Step: {report.pneu_step}</li>
-              <li>Vidros: {report.vidros}</li>
-              <li>Portas: {report.portas}</li>
-              <li>Cinto de Segurança: {report.cinto_seguranca}</li>
-              <li>Macaco: {report.macaco}</li>
-              <li>Chave de Roda: {report.chave_roda}</li>
-              <li>Nível de Óleo: {report.nivel_oleo}</li>
-              <li>Nível de Fluído de Freio: {report.nivel_fluido_freio}</li>
-              <li>Nível de Água: {report.nivel_agua}</li>
-              <li>Ruído Interno: {report.ruido_interno}</li>
-              <li>Lataria: {report.lataria}</li>
-              <li>Cones de Sinalização: {report.cones_sinalizacao}</li>
-              <li>Suspensão: {report.suspensao}</li>
-              <li>Reservatório de Água: {report.reservatorio_agua}</li>
-              <li>Trava das Portas: {report.trava_portas}</li>
-              <li>Parabrisa: {report.parabrisa}</li>
-              <li>Engrenagem: {report.engrenagem}</li>
-              <li>Marchas: {report.manchas_geral}</li>
-              <li>Borracha das Portas: {report.borracha_portas}</li>
-            </ul>
-          )}
-        </div>
-
-          ))
-        ) : (
-          <p className="text-gray-600">Nenhum relatório encontrado.</p>
-        )}
-      </div>
+                    {expandedReportId === report.id && (
+                     
+                      <Table className="mt-2 space-y-2">
+                          <TableHeader>
+                            <TableRow>
+                                <TableHead >Atributo</TableHead>
+                                <TableHead >Resposta</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                        <TableBody>
+                          <TableRow>
+                            <TableCell>
+                              Técnico 
+                            </TableCell>
+                            <TableCell>
+                              {getTechName(report.tecnico_id)}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Quilometragem 
+                            </TableCell>
+                            <TableCell>
+                              {report.quilometragem}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Freio de pé 
+                            </TableCell>
+                            <TableCell>
+                              {report.freio_pe}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Freio de Estacionamento
+                            </TableCell>
+                            <TableCell>
+                              {report.freio_estacionamento}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Motor de Partida
+                            </TableCell>
+                            <TableCell>
+                              {report.motor_partida}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Limpador de Parabrisa
+                            </TableCell>
+                            <TableCell>
+                              {report.limpador_parabrisa}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Lavador de Parabrisa
+                            </TableCell>
+                            <TableCell>
+                              {report.lavador_parabrisa}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Buzina
+                            </TableCell>
+                            <TableCell>
+                              {report.buzina}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Faróis
+                            </TableCell>
+                            <TableCell>
+                              {report.farois}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Lanternas Dianteiras
+                            </TableCell>
+                            <TableCell>
+                              {report.lanternas_dianteiras}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Lanternas Traseiras
+                            </TableCell>
+                            <TableCell>
+                              {report.lanternas_traseiras}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Luz de Freio
+                            </TableCell>
+                            <TableCell>
+                              {report.luz_freio}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Luz Traseira
+                            </TableCell>
+                            <TableCell>
+                              {report.luz_re}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Triangulo de Advertência Traseiras
+                            </TableCell>
+                            <TableCell>
+                              {report.triangulo_advertencia}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Extintor de Segurança
+                            </TableCell>
+                            <TableCell>
+                              {report.lanternas_traseiras}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Espelhos Retrovisores
+                            </TableCell>
+                            <TableCell>
+                              {report.espelhos_retrovisores}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Indicadores de Painel
+                            </TableCell>
+                            <TableCell>
+                              {report.indicadores_painel}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Condição dos Pneus
+                            </TableCell>
+                            <TableCell>
+                              {report.condicao_pneus}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Pneu Step
+                            </TableCell>
+                            <TableCell>
+                              {report.pneu_step}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Lanternas Traseiras
+                            </TableCell>
+                            <TableCell>
+                              {report.lanternas_traseiras}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Vidros
+                            </TableCell>
+                            <TableCell>
+                              {report.vidros}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Portas
+                            </TableCell>
+                            <TableCell>
+                              {report.portas}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Cinto de Segurança
+                            </TableCell>
+                            <TableCell>
+                              {report.cinto_seguranca}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Macaco
+                            </TableCell>
+                            <TableCell>
+                              {report.macaco}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Chave de Roda
+                            </TableCell>
+                            <TableCell>
+                              {report.chave_roda}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Nível de Óleo
+                            </TableCell>
+                            <TableCell>
+                              {report.nivel_oleo}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Lanternas Traseiras
+                            </TableCell>
+                            <TableCell>
+                              {report.lanternas_traseiras}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Nivel de Fluido de Freio Traseiras
+                            </TableCell>
+                            <TableCell>
+                              {report.nivel_fluido_freio}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Nivel de Água
+                            </TableCell>
+                            <TableCell>
+                              {report.nivel_agua}
+                            </TableCell>
+                          </TableRow> 
+                          <TableRow>
+                            <TableCell>
+                              Ruído Interno
+                            </TableCell>
+                            <TableCell>
+                              {report.ruido_interno}
+                            </TableCell>
+                          </TableRow>   
+                          <TableRow>
+                            <TableCell>
+                              Lataria
+                            </TableCell>
+                            <TableCell>
+                              {report.lataria}
+                            </TableCell>
+                          </TableRow>  
+                          <TableRow>
+                            <TableCell>
+                              Cones de sinalização
+                            </TableCell>
+                            <TableCell>
+                              {report.cones_sinalizacao}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Suspenção
+                            </TableCell>
+                            <TableCell>
+                              {report.suspensao}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Reservatório de Água
+                            </TableCell>
+                            <TableCell>
+                              {report.reservatorio_agua}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Trava das Portas
+                            </TableCell>
+                            <TableCell>
+                              {report.trava_portas}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Parabrisa
+                            </TableCell>
+                            <TableCell>
+                              {report.parabrisa}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Engrenagem
+                            </TableCell>
+                            <TableCell>
+                              {report.engrenagem}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Manchas no Geral
+                            </TableCell>
+                            <TableCell>
+                              {report.manchas_geral}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>
+                              Borracha das Portas
+                            </TableCell>
+                            <TableCell>
+                              {report.borracha_portas}
+                            </TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p className="text-rose-600">Nenhum relatório encontrado.</p>
+              )}
+            </div>
+          </CardContent>
+          <CardFooter>
+              <Button
+                className="w-full"
+                onClick={fetchReports}
+              >
+                Buscar Relatórios
+              </Button>
+            </CardFooter>
+        </Card>
+        <PageBackground text="Relatórios" />
+      </main>
     </div>
-      </div>
-    <PageBackground text="Relatórios" />
-    </main>
-  </div>
-    
   );
 }
