@@ -152,8 +152,7 @@ export default function Form() {
     { label: "Parabrisa", key: "parabrisa" },
     { label: "Engrenagem", key: "engrenagem" },
     { label: "Manchas Gerais", key: "manchas_geral" },
-    { label: "Borracha das Portas", key: "borracha_portas" },
-    { label: "Quilometragem", key: "quilometragem" },
+    { label: "Borracha das Portas", key: "borracha_portas" }
   ];
 
   const handleSubmit = async () => {

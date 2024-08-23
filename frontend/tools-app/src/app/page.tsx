@@ -49,7 +49,7 @@ export default function Home() {
           </div>
         </CardContent>
         <CardFooter>
-          <p>v1.0</p>
+          <p>v1.0.1</p>
         </CardFooter>
       </Card>
           <MenuCard
