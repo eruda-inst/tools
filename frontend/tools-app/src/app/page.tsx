@@ -58,7 +58,7 @@ export default function Home() {
             title="Gerador de senhas"
             description="Gerador de senhas simples"
             content="Gere senhas com a complexidade ideal para a maioria dos sites e plataformas de maneira aleatória"
-            footer="v1.0"
+            footer="v1.1"
           >
             <KeyRound />
           </MenuCard>

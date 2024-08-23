@@ -6,6 +6,7 @@ import { CheckboxnLabel } from "@/components/project/checkbox";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/project/header";
+import { Copy } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -104,7 +105,7 @@ export default function PasswordGenerator() {
                   onChange={setIncludeSpecialCharacters}
                 />
               </div>
-              {/* <Button
+             <Button
                 type="submit"
                 className="w-full transition-all"
                 onClick={async (e) => {
@@ -128,8 +129,8 @@ export default function PasswordGenerator() {
                     opacity={passwordButton.copyMode ? 1 : 0}
                   />
                 </div>
-              </Button> */}
-              <Button
+              </Button>
+              {/* <Button
                 type="submit"
                 className="w-full transition-all"
                 onClick={async (e) => {
@@ -139,14 +140,14 @@ export default function PasswordGenerator() {
                 }}
               >
                 Gerar Senha
-              </Button>
+              </Button> */}
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-primary-foreground mx-auto flex flex-col justify-center w-full sm:w-2/6">
+        {/* <Card className="bg-primary-foreground mx-auto flex flex-col justify-center w-full sm:w-2/6">
         <CardHeader className="flex flex-col justify-center items-center">{password}</CardHeader>
           
-        </Card>
+        </Card> */}
         <PageBackground text="Password" />
       </main>
     </div>
