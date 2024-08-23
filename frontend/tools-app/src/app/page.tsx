@@ -73,7 +73,7 @@ export default function Home() {
             <Calculator />
           </MenuCard>
           <MenuCard
-            link="http://10.0.2.9:3000/limpabloqueio.html"
+            link="https://toolbox.newnet.com.br/tools_api/limpabloqueio.html"
             className="w-full transition-all sm:m-0 mb-10 dark:hover:bg-zinc-50/5 backdrop-blur-md"
             title="Limpa bloqueio Simples IP"
             description="Liberação de acesso"
