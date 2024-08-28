@@ -1,9 +1,21 @@
 "use client";
-import { ToastAction } from "@/components/ui/toast"
-import { useToast } from "@/components/ui/use-toast"
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 import { API } from "@/config/env";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 import SelectCar from "./selectCar/selectCar";
 import {
   Table,
@@ -78,43 +90,41 @@ export default function Form() {
   });
 
   const [buttonStatus, setButtonStatus] = useState({
-    disabled: true
-  })
+    disabled: true,
+  });
   const handleRadioChange = (field: string, value: string) => {
     setFormData({
       ...formData,
       [field]: value,
     });
-    if((formData.tecnico_id != 0 && formData.quilometragem != 0)){
-
+    if (formData.tecnico_id != 0 && formData.quilometragem != 0) {
       setButtonStatus({
         ...buttonStatus,
-        disabled: false
-      })
-    }else{
+        disabled: false,
+      });
+    } else {
       ({
         ...buttonStatus,
-        disabled: true
-      })
+        disabled: true,
+      });
     }
   };
-  
+
   const handleCarChange = (value: string) => {
     setFormData({
       ...formData,
       veiculo_id: value, // Atualiza o veiculo_id com o valor selecionado
     });
-    if((formData.tecnico_id != 0 && formData.quilometragem != 0)){
-
+    if (formData.tecnico_id != 0 && formData.quilometragem != 0) {
       setButtonStatus({
         ...buttonStatus,
-        disabled: false
-      })
-    }else{
+        disabled: false,
+      });
+    } else {
       ({
         ...buttonStatus,
-        disabled: true
-      })
+        disabled: true,
+      });
     }
   };
   const checklistItems = [
@@ -152,18 +162,29 @@ export default function Form() {
     { label: "Parabrisa", key: "parabrisa" },
     { label: "Engrenagem", key: "engrenagem" },
     { label: "Manchas Gerais", key: "manchas_geral" },
-    { label: "Borracha das Portas", key: "borracha_portas" }
+    { label: "Borracha das Portas", key: "borracha_portas" },
   ];
 
+  const { toast } = useToast();
   const handleSubmit = async () => {
     try {
-      const response = await axios.post(`${API.CHECKLIST}/api/checklist_form`, formData);
+      const response = await axios.post(
+        `${API.CHECKLIST}/api/checklist_form`,
+        formData
+      );
       console.log("Dados enviados com sucesso:", response.data);
+      toast({
+        title: "Dados enviados",
+        description: `${response.data}`,
+      });
     } catch (error) {
+      toast({
+        title: "Erro ao enviar dados",
+        description: `${error}`,
+      });
       console.error("Erro ao enviar dados:", error);
     }
   };
-  const { toast } = useToast()
   return (
     <Card className="main-card sm:w-96 sm:h-min sm:bg-card sm:border bg-transparent border-none w-full h-full">
       <CardHeader>
@@ -227,52 +248,68 @@ export default function Form() {
         <Input
           placeholder="Código do tecnico"
           type="number"
-          onChange={(e) =>{
-
-            setFormData({ ...formData, tecnico_id: parseInt(e.target.value)})
-            if((formData.tecnico_id != 0 && formData.quilometragem != 0)){
-
+          onChange={(e) => {
+            setFormData({ ...formData, tecnico_id: parseInt(e.target.value) });
+            if (formData.tecnico_id != 0 && formData.quilometragem != 0) {
               setButtonStatus({
                 ...buttonStatus,
-                disabled: false
-              })
-            }else{
+                disabled: false,
+              });
+            } else {
               ({
                 ...buttonStatus,
-                disabled: true
-              })
-              handleCarChange
+                disabled: true,
+              });
+              handleCarChange;
             }
-          }
-            
-          }
+          }}
         />
         <Input
           placeholder="Quilometragem"
           type="number"
-          onChange={(e) =>{
-
-            setFormData({ ...formData, quilometragem: parseInt(e.target.value)})
-            if((formData.tecnico_id != 0 && formData.quilometragem != 0)){
-
+          onChange={(e) => {
+            setFormData({
+              ...formData,
+              quilometragem: parseInt(e.target.value),
+            });
+            if (formData.tecnico_id != 0 && formData.quilometragem != 0) {
               setButtonStatus({
                 ...buttonStatus,
-                disabled: false
-              })
-            }else{
+                disabled: false,
+              });
+            } else {
               ({
                 ...buttonStatus,
-                disabled: true
-              })
+                disabled: true,
+              });
             }
-            handleCarChange
-          }
-          }
+            handleCarChange;
+          }}
         />
-        <Button disabled={buttonStatus.disabled} onClick={handleSubmit}
-           className="w-full">
-          Enviar
-        </Button>
+        <AlertDialog>
+          <AlertDialogTrigger
+            asChild
+            disabled={buttonStatus.disabled}
+            className="w-full"
+          >
+            <Button className="w-full">Continuar</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Está certo de seu relatório?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Ao clicar em Enviar estará submetendo as respostas do formulário
+                para o banco de dados da empresa.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogAction onClick={handleSubmit}>
+                Enviar
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </CardFooter>
     </Card>
   );
