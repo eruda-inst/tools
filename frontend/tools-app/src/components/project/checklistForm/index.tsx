@@ -178,11 +178,29 @@ export default function Form() {
         description: `${response.data}`,
       });
     } catch (error) {
-      toast({
-        title: "Erro ao enviar dados",
-        description: `${error}, Resposta do server: ${error.response.data.detail}`,
-      });
-      console.error("Erro ao enviar dados:", error);
+      // Verifica se há uma resposta do servidor
+  if (error.response) {
+    // O servidor retornou uma resposta com um código de erro (4xx, 5xx)
+    toast({
+      title: "Erro ao enviar dados",
+      description: `Erro: ${error.message}, Resposta do servidor: ${error.response.data.detail}`,
+    });
+    console.error("Erro ao enviar dados:", error.response.data);
+  } else if (error.request) {
+    // A requisição foi feita, mas não houve resposta
+    toast({
+      title: "Erro ao enviar dados",
+      description: "Nenhuma resposta do servidor. Verifique sua conexão.",
+    });
+    console.error("Nenhuma resposta do servidor:", error.request);
+  } else {
+    // Um erro ocorreu ao configurar a requisição
+    toast({
+      title: "Erro",
+      description: `Erro inesperado: ${error.message}`,
+    });
+    console.error("Erro ao configurar a requisição:", error.message);
+  }
     }
   };
   return (
