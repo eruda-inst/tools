@@ -172,7 +172,7 @@ export default function Form() {
         `${API.CHECKLIST}/api/checklist_form`,
         formData
       );
-      console.log("Dados enviados com sucesso:", response.data);
+      console.log("Dados enviados com sucesso:", response.data.message);
       toast({
         title: "Dados enviados",
         description: `${response.data}`,
@@ -180,7 +180,7 @@ export default function Form() {
     } catch (error) {
       toast({
         title: "Erro ao enviar dados",
-        description: `${error}`,
+        description: `${error}, Resposta do server: ${error.response.data.detail}`,
       });
       console.error("Erro ao enviar dados:", error);
     }
