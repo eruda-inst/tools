@@ -175,7 +175,7 @@ export default function Form() {
       console.log("Dados enviados com sucesso:", response.data.message);
       toast({
         title: "Dados enviados",
-        description: `${response.data}`,
+        description: `${response.data.message}`,
       });
     } catch (error) {
       toast({
