@@ -1,0 +1,31 @@
+# docker-compose.yml
+
+version: '3.8'
+
+services:
+  # Serviço da nossa API FastAPI
+  backend:
+    build: ./backend  # Constrói a imagem a partir do Dockerfile na pasta ./backend
+    ports:
+      - "8000:8000"  # Mapeia a porta 8000 do host para a porta 8000 do container
+    environment:
+      # Passa a URL de conexão do banco como uma variável de ambiente
+      # O 'db' no host é o nome do serviço do banco de dados abaixo
+      - DATABASE_URL=postgresql://user:password@db/mydatabase
+    depends_on:
+      - db  # Diz ao Docker para iniciar o serviço 'db' antes do 'backend'
+
+  # Serviço do Banco de Dados PostgreSQL
+  db:
+    image: postgres:13-alpine # Usa uma imagem oficial do PostgreSQL
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/ # Monta o volume para persistir os dados
+    environment:
+      # Variáveis para criar o banco e o usuário inicial
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=mydatabase
+
+# Define o volume que será usado pelo serviço 'db'
+volumes:
+  postgres_data:
