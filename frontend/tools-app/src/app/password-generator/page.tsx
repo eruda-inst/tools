@@ -1,12 +1,11 @@
 "use client";
-
-import Logo from "@/components/project/logo";
+import "./_Password.scss"
 import axios from "axios"
-import { ModeToggle } from "@/components/ui/theme-toggle";
 import PageBackground from "@/components/project/pageBackgorund";
 import { CheckboxnLabel } from "@/components/project/checkbox";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import Header from "@/components/project/header";
 import { Copy } from "lucide-react";
 import {
   Card,
@@ -17,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { API } from "@/config/env";
 
 export default function PasswordGenerator() {
   const [inputNumberValue, setInputNumberValue] = useState(8);
@@ -31,7 +31,7 @@ export default function PasswordGenerator() {
   });
 
   const handleSubmit = async () => {
-    const baseUrl = 'http://10.0.2.9:3000/generate-password';
+    const baseUrl = API.TOOLS + '/generate-password';
     const params = {
       length: inputNumberValue, 
       uppercase: includeUpperCases, 
@@ -57,15 +57,10 @@ export default function PasswordGenerator() {
   };
 
   return (
-    <div className="page-body h-full w-screen p-5">
-      <div className="nav-bar flex flex-row items-center justify-between w-100 ">
-        <Logo></Logo>
-        <div className="right-container">
-          <ModeToggle />
-        </div>
-      </div>
-      <main className="flex h-full flex-col gap-3 items-center justify-center p-24">
-        <Card className="mx-auto w-2/6">
+    <div className="page-body overflow-clip h-full w-screen">
+      <Header/>
+      <main className="flex overflow-clip h-screen flex-col gap-3 items-center justify-center p-10 sm:p-24">
+        <Card className="w-full m-0 sm:mx-auto sm:w-2/6">
           <CardHeader>
             <CardTitle className="text-2xl">Gerador de senhas</CardTitle>
             <CardDescription>
@@ -93,7 +88,7 @@ export default function PasswordGenerator() {
                   required
                 />
               </div>
-              <div className="grid gap-2">
+              <div className="grid gap-2 checkbox-group">
                 <CheckboxnLabel
                   label="Incluir Letras Maiúsculas"
                   checked={includeUpperCases}
@@ -110,7 +105,7 @@ export default function PasswordGenerator() {
                   onChange={setIncludeSpecialCharacters}
                 />
               </div>
-              {/* <Button
+             <Button
                 type="submit"
                 className="w-full transition-all"
                 onClick={async (e) => {
@@ -134,8 +129,8 @@ export default function PasswordGenerator() {
                     opacity={passwordButton.copyMode ? 1 : 0}
                   />
                 </div>
-              </Button> */}
-              <Button
+              </Button>
+              {/* <Button
                 type="submit"
                 className="w-full transition-all"
                 onClick={async (e) => {
@@ -145,14 +140,14 @@ export default function PasswordGenerator() {
                 }}
               >
                 Gerar Senha
-              </Button>
+              </Button> */}
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-primary-foreground mx-auto flex flex-col justify-center w-2/6">
+        {/* <Card className="bg-primary-foreground mx-auto flex flex-col justify-center w-full sm:w-2/6">
         <CardHeader className="flex flex-col justify-center items-center">{password}</CardHeader>
           
-        </Card>
+        </Card> */}
         <PageBackground text="Password" />
       </main>
     </div>

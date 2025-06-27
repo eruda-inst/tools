@@ -1,6 +1,7 @@
 "use client";
 import "./_InstalCalc.scss"
 import { Input } from "@/components/ui/input";
+import { API } from "@/config/env"
 import {
   Card,
   CardContent,
@@ -9,9 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import DynamicInput from "@/components/project/dynamicStateInput";
-import Logo from "@/components/project/logo";
-import { ModeToggle } from "@/components/ui/theme-toggle";
+import Header from "@/components/project/header";
 import FiberValue from "@/components/project/fiberValueAPI";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -21,7 +20,7 @@ export default function InstalCalc() {
   const [refreshFiber, setRefreshFiber] = useState(false)
   const [installValue, setInstallValue] = useState(0);
   const handleSubmit = async () => {
-    const baseUrl = "http://10.0.2.9:3000/calculadora_instalacao";
+    const baseUrl = API.TOOLS + "/calculadora_instalacao";
 
     try {
       const response = await axios.get(baseUrl);
@@ -52,7 +51,7 @@ export default function InstalCalc() {
     } else if (fiberLength >= 500 && fiberLength <= 550) {
         setInstallValue(250);
     } else {
-        setInstallValue(parseInt((fiberPrice * 2 * fiberLength).toFixed(2)));
+        setInstallValue(parseFloat((fiberPrice * 2 * fiberLength).toFixed(2)));
     } 
   }
 
@@ -67,16 +66,11 @@ export default function InstalCalc() {
   }, [refreshFiber]);
 
   return (
-    <div className="page-body h-full w-screen p-5">
-      <div className="nav-bar flex flex-row items-center justify-between w-100 ">
-        <Logo></Logo>
-        <div className="right-container">
-          <ModeToggle />
-        </div>
-      </div>
-      <main className="page-body h-full flex flex-row items-center justify-center  w-full p-5">
-        <div className="container flex flex-row w-full justify-center h-min">
-          <Card className="h-min dark:bg-primary-foreground bg-primary-foreground/50 w-3/12 min-w-48">
+    <div className="page-body h-full overflow-clip w-screen">
+      <Header/>
+      <main className="page-body h-screen flex flex-row gap-3 items-center justify-center  w-full p-5">
+        <div className="p-0 container flex flex-col gap-4 items-center sm:flex-row w-full justify-center h-full">
+          <Card className="h-min dark:bg-primary-foreground bg-primary-foreground/50 w-full sm:w-3/12 min-w-48">
             <CardHeader>
               <CardTitle>Preço atual do metro da fibra</CardTitle>
               <CardDescription className="text-zinc-700 dark:text-zinc-300">
@@ -91,13 +85,13 @@ export default function InstalCalc() {
               )}
             </CardContent>
           </Card>
-          <Card className="ml-4 h-min w-2/6 min-w-48">
+          <Card className="sm:ml-4 h-min w-full sm:w-2/6 min-w-48">
             <CardHeader>
               <CardTitle>Calculadora de Valor de Instalação</CardTitle>
             </CardHeader>
             <CardContent>
               Valor da instalação
-              <div className="accent-text main-value text-4xl w-full h-min flex flex-row justify-start items-center">
+              <div className="main-value text-4xl w-full h-min flex flex-row justify-start items-center">
                 R$ {installValue}
               </div>
             </CardContent>
